@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Document Checker — KnowYourRights</title>
+<meta name="description" content="Paste any contract, terms and conditions, or legal letter and get an instant plain-English breakdown of what it means, what's unfair, and what your rights are.">
+<link rel="canonical" href="https://knowyourrights.co.uk/document-checker.html">
+<link rel="stylesheet" href="css/style.css">
+<!-- PayPal JS SDK: replace YOUR_CLIENT_ID with your ID from developer.paypal.com -->
+<script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+<style>
+/* ─── LOCK SCREEN ─── */
+#locked { display: block; }
+#checker { display: none; }
+
+.lock-hero { background: var(--ink); padding: 100px 40px 0; }
+.lock-hero-inner { max-width: 1100px; margin: 0 auto; padding-bottom: 60px; }
+.lock-hero h1 { font-size: clamp(42px, 6vw, 72px); color: #fff; line-height: 1.0; margin: 14px 0 18px; }
+.lock-hero h1 em { font-style: normal; color: var(--accent); }
+.lock-hero p  { font-size: 18px; font-weight: 300; color: rgba(245,242,235,.5); max-width: 520px; line-height: 1.75; }
+
+.lock-body { max-width: 1100px; margin: 0 auto; padding: 60px 40px 100px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+
+/* use cases */
+.use-cases { margin: 32px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.use-case { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+.use-case .uc-icon { font-size: 24px; margin-bottom: 8px; }
+.use-case h4 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; margin-bottom: 5px; }
+.use-case p { font-size: 13px; color: var(--muted); margin: 0; line-height: 1.5; }
+
+/* plan cards */
+.plan-card { border: 1.5px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 12px; cursor: pointer; transition: all .2s; background: var(--card); }
+.plan-card:hover, .plan-card.sel { border-color: var(--ink); background: var(--ink); color: #fff; }
+.plan-card .ptop { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.plan-card .pname { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; }
+.plan-card .pprice { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; }
+.plan-card .pprice sub { font-size: 13px; font-weight: 400; opacity: .5; }
+.plan-card .psub { font-size: 13px; color: var(--muted); transition: color .2s; }
+.plan-card.sel .psub { color: rgba(245,242,235,.4); }
+.plan-badge { background: var(--orange); color: #fff; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 10px; border-radius: 100px; margin-left: 8px; vertical-align: middle; }
+.pp-wrap { margin-top: 14px; min-height: 46px; }
+.pp-note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px; }
+.setup-info { background: #e6f1fb; border: 1.5px solid #85b7eb; border-radius: 12px; padding: 16px 18px; margin-top: 14px; font-size: 13px; color: #1e40af; line-height: 1.65; }
+.setup-info strong { color: #0c447c; }
+.setup-info a { color: #0c447c; font-weight: 600; }
+.setup-info code { background: rgba(37,99,235,.1); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 12px; }
+.dev-btn { margin-top: 12px; width: 100%; padding: 11px; background: transparent; border: 1.5px dashed var(--border); border-radius: 100px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; transition: all .2s; }
+.dev-btn:hover { border-color: var(--ink); color: var(--ink); }
+
+/* preview panel */
+.preview-panel { background: #1a1916; border-radius: 22px; padding: 28px; position: sticky; top: 80px; }
+.preview-panel h3 { font-family: 'Syne', sans-serif; font-weight: 700; color: #fff; font-size: 16px; margin-bottom: 20px; }
+.preview-item { margin-bottom: 18px; }
+.preview-label { font-size: 10px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: rgba(255,255,255,.3); margin-bottom: 6px; }
+.preview-bar { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); border-radius: 10px; padding: 12px 14px; font-size: 13px; line-height: 1.6; }
+.preview-bar.ok { border-color: rgba(200,241,53,.25); background: rgba(200,241,53,.07); color: rgba(200,241,53,.85); }
+.preview-bar.warn { border-color: rgba(255,107,53,.25); background: rgba(255,107,53,.07); color: rgba(255,107,53,.85); }
+.preview-bar.info { color: rgba(245,242,235,.6); }
+.preview-lock { display: flex; flex-direction: column; align-items: center; margin-top: -50px; position: relative; z-index: 1; text-align: center; }
+.preview-blur { filter: blur(5px); opacity: .35; pointer-events: none; margin-top: 10px; }
+.preview-lock span { font-size: 32px; margin-bottom: 8px; }
+.preview-lock p { font-size: 12px; color: rgba(255,255,255,.4); max-width: 180px; line-height: 1.5; }
+
+/* ─── CHECKER TOOL ─── */
+.checker-wrap { max-width: 900px; margin: 0 auto; padding: 0 40px 100px; }
+.checker-hdr { padding: 20px 0 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+.checker-hdr h2 { font-size: 20px; }
+.checker-hdr .plan-pill { background: var(--accent); color: var(--ink); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; }
+.input-card { background: var(--card); border: 1px solid var(--border); border-radius: 22px; padding: 32px; margin-bottom: 20px; }
+.input-card h3 { font-size: 18px; margin-bottom: 6px; }
+.input-card .sub { font-size: 14px; color: var(--muted); margin-bottom: 20px; font-weight: 300; }
+.doc-tabs { display: flex; gap: 6px; margin-bottom: 20px; }
+.doc-tab { padding: 8px 16px; border-radius: 100px; border: 1.5px solid var(--border); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; background: var(--paper); color: var(--muted); transition: all .2s; }
+.doc-tab.active { border-color: var(--ink); background: var(--ink); color: var(--accent); }
+#doc-text { width: 100%; min-height: 220px; background: var(--paper); border: 1.5px solid var(--border); border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; padding: 16px; outline: none; resize: vertical; transition: border-color .2s; color: var(--ink); line-height: 1.7; }
+#doc-text:focus { border-color: var(--ink); background: #fff; }
+.doc-context { margin-top: 14px; }
+.doc-context label { display: block; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.doc-context select { width: 100%; background: var(--paper); border: 1.5px solid var(--border); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; padding: 11px 14px; outline: none; -webkit-appearance: none; transition: border-color .2s; color: var(--ink); }
+.doc-context select:focus { border-color: var(--ink); }
+.analyse-btn { width: 100%; margin-top: 20px; background: var(--ink); color: var(--accent); border: none; border-radius: 14px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700; padding: 16px; cursor: pointer; transition: opacity .2s, transform .15s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.analyse-btn:hover { opacity: .88; transform: translateY(-1px); }
+.analyse-btn:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+
+/* results */
+.results-card { background: var(--card); border: 1px solid var(--border); border-radius: 22px; padding: 32px; display: none; animation: fadeUp .4s ease; }
+.results-card.show { display: block; }
+.result-section { margin-bottom: 28px; }
+.result-section:last-child { margin-bottom: 0; }
+.result-section h4 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.result-section p { font-size: 15px; font-weight: 300; color: #3d3b37; line-height: 1.8; margin-bottom: 10px; }
+.result-section ul { padding-left: 20px; margin: 0; }
+.result-section li { font-size: 14.5px; font-weight: 300; color: #3d3b37; line-height: 1.8; margin-bottom: 6px; }
+.flag-list { list-style: none; padding: 0; margin: 0; }
+.flag-item { display: flex; gap: 10px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.flag-item:last-child { border-bottom: none; }
+.flag-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.flag-dot.red    { background: #ef4444; }
+.flag-dot.amber  { background: var(--orange); }
+.flag-dot.green  { background: #22c55e; }
+.flag-text { font-size: 14px; color: #3d3b37; line-height: 1.65; flex: 1; }
+.flag-text strong { font-weight: 600; color: var(--ink); }
+.rating-row { display: flex; gap: 12px; margin: 16px 0; flex-wrap: wrap; }
+.rating-pill { padding: 8px 16px; border-radius: 100px; font-size: 13px; font-weight: 600; }
+.rating-fair    { background: #dcfce7; color: #14532d; }
+.rating-concern { background: #fff7ed; color: #7c2d12; }
+.rating-unfair  { background: #fee2e2; color: #7f1d1d; }
+.divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+.re-analyse { margin-top: 20px; background: transparent; border: 1.5px solid var(--border); border-radius: 100px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; padding: 10px 20px; cursor: pointer; color: var(--muted); transition: all .2s; }
+.re-analyse:hover { border-color: var(--ink); color: var(--ink); }
+.loading-state { text-align: center; padding: 40px 20px; }
+.loading-state .spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--ink); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-state p { font-size: 15px; color: var(--muted); }
+
+.signout-btn { font-size: 12px; color: var(--muted); background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: background .15s; font-family: 'DM Sans', sans-serif; }
+.signout-btn:hover { background: var(--border); color: var(--ink); }
+
+@media (max-width: 860px) {
+  .lock-body { grid-template-columns: 1fr; padding: 40px 20px 60px; gap: 36px; }
+  .lock-hero { padding: 90px 20px 0; }
+  .preview-panel { position: static; }
+  .use-cases { grid-template-columns: 1fr; }
+  .checker-wrap { padding: 0 20px 60px; }
+}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="index.html" class="nav-logo">KnowYour<em>Rights</em></a>
+  <div class="nav-links">
+    <a href="consumer-rights.html">Consumer</a>
+    <a href="online-rights.html">Online</a>
+    <a href="tools.html">Tools</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="about.html">About</a>
+    <a href="assistant.html" class="nav-cta">AI Assistant</a>
+  </div>
+</nav>
+
+<!-- ══════════ LOCKED VIEW ══════════ -->
+<div id="locked">
+  <div class="lock-hero">
+    <div class="lock-hero-inner">
+      <div class="tag tag-accent">Document Checker</div>
+      <h1>Paste any document.<br>Know if it's <em>fair.</em></h1>
+      <p>Contracts, terms and conditions, landlord letters, employment clauses — our AI reads it, flags the problems, and tells you your rights. Plain English. No solicitor needed.</p>
+    </div>
+  </div>
+
+  <div class="lock-body">
+    <div>
+      <h2 style="font-size:clamp(22px,3vw,30px);margin-bottom:8px">What can you analyse?</h2>
+      <p style="font-size:15px;color:var(--muted);margin-bottom:0;line-height:1.65">Paste the text of any document and get a full breakdown in seconds.</p>
+      <div class="use-cases">
+        <div class="use-case"><div class="uc-icon">📋</div><h4>Contracts</h4><p>Employment contracts, freelance agreements, service contracts — spot unfair clauses instantly.</p></div>
+        <div class="use-case"><div class="uc-icon">🏠</div><h4>Tenancy agreements</h4><p>Know exactly what your landlord can and can't do before you sign.</p></div>
+        <div class="use-case"><div class="uc-icon">📄</div><h4>Terms &amp; conditions</h4><p>Does an app's T&amp;Cs give them your data forever? Find out before you agree.</p></div>
+        <div class="use-case"><div class="uc-icon">✉️</div><h4>Legal letters</h4><p>Received a threatening letter from a company or debt collector? Know if they're bluffing.</p></div>
+        <div class="use-case"><div class="uc-icon">💼</div><h4>Employment clauses</h4><p>Non-compete clauses, notice periods, redundancy terms — understand what you agreed to.</p></div>
+        <div class="use-case"><div class="uc-icon">🛒</div><h4>Refund policies</h4><p>Check whether a shop's refund policy actually overrides your statutory rights (it can't).</p></div>
+      </div>
+
+      <h2 style="font-size:clamp(20px,3vw,28px);margin-bottom:8px;margin-top:40px">Subscribe to unlock</h2>
+      <p style="font-size:15px;color:var(--muted);margin-bottom:20px;line-height:1.65">The free AI chat stays free. The Document Checker is our premium feature.</p>
+
+      <div class="plan-card sel" id="pc-standard" onclick="selPlan('standard')">
+        <div class="ptop"><div class="pname">Standard <span class="plan-badge">Popular</span></div><div class="pprice">£9<sub>/mo</sub></div></div>
+        <div class="psub">Unlimited document checks · AI assistant access · All guides</div>
+      </div>
+      <div class="plan-card" id="pc-pro" onclick="selPlan('pro')">
+        <div class="ptop"><div class="pname">Pro</div><div class="pprice">£19<sub>/mo</sub></div></div>
+        <div class="psub">Everything + side-by-side comparison of up to 3 documents</div>
+      </div>
+
+      <div class="pp-wrap" id="pp-container"></div>
+      <p class="pp-note">Secure payment via PayPal · Cancel anytime</p>
+
+      <div class="setup-info">
+        <strong>PayPal not yet configured.</strong> Replace <code>YOUR_CLIENT_ID</code> at the top of this file, then add your Plan IDs in the <code>PLAN_IDS</code> object in the script below.<br>
+        <a href="https://developer.paypal.com/docs/subscriptions/" target="_blank">PayPal subscriptions docs →</a>
+      </div>
+
+      <!-- DEV BYPASS — remove before going live -->
+      <button class="dev-btn" onclick="unlockChecker('standard')">🔧 Dev: bypass paywall &amp; test Document Checker</button>
+    </div>
+
+    <div class="preview-panel">
+      <h3>Example analysis</h3>
+      <div class="preview-item">
+        <div class="preview-label">Plain-English summary</div>
+        <div class="preview-bar info">This clause gives the company the right to change the price of your subscription at any time, with only 7 days' notice, and you have no right to cancel without a penalty...</div>
+      </div>
+      <div class="preview-item">
+        <div class="preview-label">Red flags found</div>
+        <div class="preview-bar warn">⚠ Automatic renewal with no reminder obligation</div>
+      </div>
+      <div class="preview-blur">
+        <div class="preview-item">
+          <div class="preview-label">Your rights</div>
+          <div class="preview-bar ok">✓ Under the Consumer Contracts Regulations, you may still have the right to cancel within 14 days even if the contract says otherwise...</div>
+        </div>
+        <div class="preview-item">
+          <div class="preview-label">Overall fairness rating</div>
+          <div class="preview-bar warn">⚠ Some concerns — 3 clauses worth challenging</div>
+        </div>
+      </div>
+      <div class="preview-lock">
+        <span>🔒</span>
+        <p>Subscribe to run your own analysis</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ CHECKER TOOL ══════════ -->
+<div id="checker">
+  <div class="checker-wrap">
+    <div class="checker-hdr">
+      <div style="display:flex;align-items:center;gap:10px">
+        <h2>Document Checker</h2>
+        <span class="plan-pill" id="plan-label">Standard</span>
+      </div>
+      <button class="signout-btn" onclick="signOut()">Sign out</button>
+    </div>
+
+    <div class="input-card">
+      <h3>Paste your document text</h3>
+      <p class="sub">Copy and paste the text from any contract, T&amp;Cs, letter, or clause. The more you paste, the more detailed the analysis.</p>
+
+      <div class="doc-tabs">
+        <button class="doc-tab active" onclick="setTab(this,'contract')">Contract / T&amp;Cs</button>
+        <button class="doc-tab" onclick="setTab(this,'letter')">Letter / Notice</button>
+        <button class="doc-tab" onclick="setTab(this,'policy')">Refund / Privacy Policy</button>
+        <button class="doc-tab" onclick="setTab(this,'clause')">Single clause</button>
+      </div>
+
+      <textarea id="doc-text" placeholder="Paste your document text here...&#10;&#10;e.g. &quot;The Company reserves the right to terminate this agreement at any time without notice...&quot;"></textarea>
+
+      <div class="doc-context">
+        <label>What type of document is this?</label>
+        <select id="doc-type">
+          <option value="">Choose to help the AI give better advice...</option>
+          <option value="employment">Employment contract</option>
+          <option value="tenancy">Tenancy / rental agreement</option>
+          <option value="service">Service or freelance contract</option>
+          <option value="terms">App or website terms and conditions</option>
+          <option value="refund">Refund or returns policy</option>
+          <option value="privacy">Privacy policy</option>
+          <option value="debt">Debt collection or legal letter</option>
+          <option value="other">Other legal document</option>
+        </select>
+      </div>
+
+      <button class="analyse-btn" id="analyse-btn" onclick="analyse()">
+        Analyse document
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M12 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results-card" id="results">
+      <div id="results-content"></div>
+      <button class="re-analyse" onclick="reset()">← Analyse another document</button>
+    </div>
+
+    <p style="font-size:12px;color:var(--muted);margin-top:16px;line-height:1.6">Document Checker provides general legal information based on UK law. It is not legal advice. For high-value or complex matters, consult a qualified solicitor at <a href="https://solicitors.lawsociety.org.uk" target="_blank" style="color:var(--orange)">solicitors.lawsociety.org.uk</a>.</p>
+  </div>
+</div>
+
+<script>
+// ═══ PAYPAL PLAN IDs — replace with your real IDs from developer.paypal.com ═══
+const PLAN_IDS = {
+  standard: 'P-REPLACE_WITH_STANDARD_PLAN_ID',
+  pro:      'P-REPLACE_WITH_PRO_PLAN_ID'
+};
+// ══════════════════════════════════════════════════════════════════════════════
+
+let currentPlan = 'standard';
+let docType = '';
+
+// Check if returning from PayPal
+const urlP = new URLSearchParams(window.location.search);
+if (urlP.get('paid') === 'true') {
+  const p = localStorage.getItem('kyr_doc_plan') || 'standard';
+  unlockChecker(p);
+}
+
+function selPlan(plan) {
+  currentPlan = plan;
+  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('sel'));
+  document.getElementById('pc-' + plan).classList.add('sel');
+  renderPayPal();
+}
+
+function renderPayPal() {
+  const c = document.getElementById('pp-container');
+  c.innerHTML = '';
+  if (typeof paypal === 'undefined') return;
+  paypal.Buttons({
+    style: { layout: 'vertical', color: 'black', shape: 'pill', label: 'subscribe' },
+    createSubscription: (data, actions) => {
+      localStorage.setItem('kyr_doc_plan', currentPlan);
+      return actions.subscription.create({ plan_id: PLAN_IDS[currentPlan] });
+    },
+    onApprove: () => unlockChecker(currentPlan),
+    onError: err => { alert('Payment error. Please try again.'); console.error(err); }
+  }).render('#pp-container');
+}
+
+function unlockChecker(plan) {
+  document.getElementById('locked').style.display = 'none';
+  document.getElementById('checker').style.display = 'block';
+  document.getElementById('plan-label').textContent = plan.charAt(0).toUpperCase() + plan.slice(1);
+}
+
+function signOut() {
+  localStorage.removeItem('kyr_doc_plan');
+  document.getElementById('checker').style.display = 'none';
+  document.getElementById('locked').style.display = 'block';
+}
+
+function setTab(btn, type) {
+  document.querySelectorAll('.doc-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  docType = type;
+  const placeholders = {
+    contract: 'Paste your contract or terms and conditions text here...',
+    letter: 'Paste the letter or notice text here...',
+    policy: 'Paste the refund or privacy policy text here...',
+    clause: 'Paste the specific clause you want explained here...'
+  };
+  document.getElementById('doc-text').placeholder = placeholders[type] || 'Paste your document text here...';
+}
+
+function reset() {
+  document.getElementById('doc-text').value = '';
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('results-content').innerHTML = '';
+  document.getElementById('analyse-btn').disabled = false;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function analyse() {
+  const text = document.getElementById('doc-text').value.trim();
+  const dtype = document.getElementById('doc-type').value;
+
+  if (text.length < 50) {
+    alert('Please paste at least a few sentences of document text to analyse.');
+    return;
+  }
+
+  const btn = document.getElementById('analyse-btn');
+  btn.disabled = true;
+
+  const results = document.getElementById('results');
+  const content = document.getElementById('results-content');
+
+  content.innerHTML = `
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Analysing your document...</p>
+    </div>`;
+  results.classList.add('show');
+  results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  const systemPrompt = `You are a UK legal document analyst for KnowYourRights, a plain-English legal rights website. Your job is to analyse legal documents, contracts, and terms and conditions on behalf of ordinary UK consumers.
+
+When given document text, you must respond with a structured JSON object only — no preamble, no markdown fences. The JSON must have exactly this structure:
+
+{
+  "summary": "2-3 sentence plain-English summary of what this document/clause actually means and does",
+  "fairness": "fair" | "concerns" | "unfair",
+  "fairness_reason": "One sentence explaining the overall fairness rating",
+  "flags": [
+    {
+      "severity": "red" | "amber" | "green",
+      "title": "Short title of the flag",
+      "detail": "Plain-English explanation of what this means and why it matters"
+    }
+  ],
+  "your_rights": [
+    "Plain-English statement of a relevant right the user has under UK law"
+  ],
+  "action": "What the user should do — practical next steps in plain English"
+}
+
+Rules:
+- Red flags = genuinely illegal, unenforceable, or seriously unfair clauses
+- Amber flags = unusual, worth questioning, or concerning but possibly legal  
+- Green flags = clauses that are actually in the user's favour
+- Always reference UK law where relevant (Consumer Rights Act 2015, UK GDPR, etc.)
+- Be honest — if a document looks fine, say so. Not everything is sinister.
+- Maximum 5 flags total. Pick the most important ones.
+- Keep all text concise and plain English. No jargon.`;
+
+  const userMsg = `Please analyse this ${dtype ? dtype + ' ' : ''}document:\n\n${text}`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1500,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userMsg }]
+      })
+    });
+
+    const data = await res.json();
+
+    if (!data.content || !data.content[0]) throw new Error('No response');
+
+    let raw = data.content[0].text.trim();
+    raw = raw.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    const result = JSON.parse(raw);
+
+    const fairnessClass = { fair: 'rating-fair', concerns: 'rating-concern', unfair: 'rating-unfair' }[result.fairness] || 'rating-concern';
+    const fairnessLabel = { fair: '✓ Looks fair', concerns: '⚠ Some concerns', unfair: '✗ Unfair clauses found' }[result.fairness] || '⚠ Some concerns';
+
+    const flagsHtml = (result.flags || []).map(f => `
+      <li class="flag-item">
+        <div class="flag-dot ${f.severity}"></div>
+        <div class="flag-text"><strong>${f.title}</strong><br>${f.detail}</div>
+      </li>`).join('');
+
+    const rightsHtml = (result.your_rights || []).map(r => `<li>${r}</li>`).join('');
+
+    content.innerHTML = `
+      <div class="result-section">
+        <h4>📋 Plain-English Summary</h4>
+        <p>${result.summary}</p>
+        <div class="rating-row">
+          <span class="rating-pill ${fairnessClass}">${fairnessLabel}</span>
+        </div>
+        <p style="font-size:13px;color:var(--muted)">${result.fairness_reason}</p>
+      </div>
+
+      <hr class="divider">
+
+      <div class="result-section">
+        <h4>🚩 Flags &amp; Clauses to Know About</h4>
+        <ul class="flag-list">${flagsHtml || '<li class="flag-item"><div class="flag-dot green"></div><div class="flag-text">No significant red flags found in this text.</div></li>'}</ul>
+      </div>
+
+      <hr class="divider">
+
+      <div class="result-section">
+        <h4>⚖️ Your Rights</h4>
+        <ul>${rightsHtml || '<li>Unable to determine specific rights from this text alone.</li>'}</ul>
+      </div>
+
+      <hr class="divider">
+
+      <div class="result-section">
+        <h4>✅ What to Do Next</h4>
+        <p>${result.action}</p>
+      </div>`;
+
+  } catch (err) {
+    content.innerHTML = `
+      <div class="result-section">
+        <h4>Something went wrong</h4>
+        <p>We couldn't analyse your document. Please check your internet connection and try again. If the problem persists, try pasting a shorter section of the document.</p>
+      </div>`;
+    console.error(err);
+  }
+
+  btn.disabled = false;
+}
+
+// Init PayPal
+if (typeof paypal !== 'undefined') renderPayPal();
+else window.addEventListener('load', renderPayPal);
+</script>
+</body>
+</html>

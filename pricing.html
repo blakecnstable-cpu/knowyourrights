@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pricing — KnowYourRights Document Checker</title>
+<meta name="description" content="Paste any contract, tenancy agreement, or legal letter and get an instant plain-English breakdown of what it means and whether it's fair. From £9/month.">
+<link rel="canonical" href="https://knowyourrights.co.uk/pricing.html">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.pricing-wrap{max-width:1060px;margin:0 auto;padding:56px 40px 100px}
+.free-paid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:64px}
+.fp{border-radius:20px;padding:28px}
+.fp-free{background:var(--paper);border:2px solid var(--border)}
+.fp-paid{background:var(--ink)}
+.fp-label{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;margin-bottom:10px}
+.fp-free .fp-label{color:var(--muted)}
+.fp-paid .fp-label{color:var(--accent)}
+.fp h3{font-size:clamp(18px,2.5vw,24px);margin-bottom:12px}
+.fp-free h3{color:var(--ink)}
+.fp-paid h3{color:#fff}
+.fp ul{list-style:none;padding:0;margin:0}
+.fp li{font-size:14px;padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px;font-weight:300}
+.fp-paid li{border-color:rgba(255,255,255,.08);color:rgba(245,242,235,.8)}
+.fp li::before{font-weight:700;flex-shrink:0}
+.fp-free li::before{content:'✓';color:var(--orange)}
+.fp-paid li::before{content:'✓';color:var(--accent)}
+.fp li:last-child{border-bottom:none}
+.fp-btn{display:block;text-align:center;margin-top:20px;padding:12px;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;transition:all .2s}
+.fp-free .fp-btn{background:transparent;border:1.5px solid var(--ink);color:var(--ink)}
+.fp-free .fp-btn:hover{background:var(--ink);color:var(--accent)}
+.fp-paid .fp-btn{background:var(--accent);color:var(--ink);border:none}
+.fp-paid .fp-btn:hover{opacity:.88}
+.explainer{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-bottom:64px}
+.ex-card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:28px}
+.ex-step{display:flex;gap:14px;align-items:flex-start;margin-bottom:20px}
+.ex-step:last-child{margin-bottom:0}
+.ex-num{width:32px;height:32px;border-radius:50%;background:var(--ink);color:var(--accent);font-family:'Syne',sans-serif;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ex-step h4{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:3px}
+.ex-step p{font-size:13px;color:var(--muted);margin:0;line-height:1.55}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:28px 0}
+.tier{border:1.5px solid var(--border);border-radius:22px;padding:30px;background:var(--card);display:flex;flex-direction:column;position:relative;transition:transform .2s,box-shadow .2s}
+.tier:hover{transform:translateY(-4px);box-shadow:0 16px 44px rgba(15,14,12,.1)}
+.tier.hot{background:var(--ink);border-color:var(--ink)}
+.tier-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--orange);color:#fff;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:4px 14px;border-radius:100px;white-space:nowrap}
+.tier-name{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.tier.hot .tier-name{color:rgba(245,242,235,.4)}
+.tier-price{font-family:'Syne',sans-serif;font-weight:800;font-size:48px;letter-spacing:-0.04em;line-height:1;margin-bottom:4px}
+.tier-price sup{font-size:22px;vertical-align:super;line-height:0}
+.tier-price sub{font-size:15px;font-weight:400;opacity:.4}
+.tier.hot .tier-price{color:#fff}
+.tier-desc{font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.5}
+.tier.hot .tier-desc{color:rgba(245,242,235,.4)}
+.feat-list{list-style:none;padding:0;margin:0 0 28px;flex:1}
+.feat-list li{font-size:14px;padding:9px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:10px;line-height:1.45;font-weight:300}
+.tier.hot .feat-list li{border-color:rgba(255,255,255,.08);color:rgba(245,242,235,.8)}
+.feat-list li::before{content:'✓';font-weight:700;color:var(--orange);flex-shrink:0;margin-top:1px}
+.tier.hot .feat-list li::before{color:var(--accent)}
+.pp-ph{background:var(--paper);border:1.5px dashed var(--border);border-radius:12px;padding:14px;text-align:center;font-size:12px;color:var(--muted);line-height:1.6}
+.tier.hot .pp-ph{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.15);color:rgba(245,242,235,.35)}
+.pp-ph a{color:var(--orange);font-weight:600}
+.tier.hot .pp-ph a{color:var(--accent)}
+.pp-note{font-size:11px;text-align:center;margin-top:8px;color:var(--muted)}
+.tier.hot .pp-note{color:rgba(245,242,235,.3)}
+.setup-box{background:#e6f1fb;border:1.5px solid #85b7eb;border-radius:18px;padding:24px 28px;margin-bottom:40px}
+.setup-box h3{font-size:17px;color:#0c447c;margin-bottom:12px}
+.setup-box ol{font-size:14px;color:#185fa5;line-height:1.9;padding-left:20px;margin:0}
+.setup-box li{margin-bottom:6px}
+.setup-box a{color:#0c447c;font-weight:600}
+.setup-box code{background:rgba(37,99,235,.1);padding:2px 7px;border-radius:4px;font-family:monospace;font-size:12px}
+.ct{width:100%;border-collapse:collapse;margin:28px 0}
+.ct th,.ct td{padding:13px 14px;text-align:left;border-bottom:1px solid var(--border);font-size:14px}
+.ct th{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.ct td:not(:first-child){text-align:center}
+.tick{color:var(--orange);font-weight:700}
+.cross{color:var(--border)}
+.faq-wrap{max-width:680px;margin:56px auto 0}
+.faq-item{border-bottom:1px solid var(--border);padding:18px 0}
+.faq-q{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq-a{font-size:15px;font-weight:300;color:var(--muted);line-height:1.75;margin-top:12px;display:none}
+.faq-a.open{display:block;animation:fadeUp .25s ease}
+.faq-q .arr{font-size:18px;transition:transform .2s;color:var(--muted)}
+.faq-q.open .arr{transform:rotate(180deg)}
+@media(max-width:800px){
+  .tiers{grid-template-columns:1fr;max-width:420px;margin-left:auto;margin-right:auto}
+  .explainer,.free-paid{grid-template-columns:1fr;gap:20px}
+  .pricing-wrap{padding:40px 20px 60px}
+}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="index.html" class="nav-logo">KnowYour<em>Rights</em></a>
+  <div class="nav-links">
+    <a href="consumer-rights.html">Consumer</a>
+    <a href="online-rights.html">Online</a>
+    <a href="tools.html">Tools</a>
+    <a href="pricing.html" class="active">Pricing</a>
+    <a href="about.html">About</a>
+    <a href="assistant.html" class="nav-cta">AI Assistant</a>
+  </div>
+</nav>
+
+<div class="page-hero" style="background:var(--ink);color:#fff;padding-top:100px">
+  <div class="hero-ghost" style="-webkit-text-stroke-color:rgba(255,255,255,.06)">PRICING</div>
+  <div class="page-hero-inner">
+    <div class="tag tag-accent">Pricing</div>
+    <h1 style="color:#fff">Most of the site is free.<br>One feature isn't.</h1>
+    <p class="lead" style="color:rgba(245,242,235,.55)">All the guides, the AI assistant, and the legal tools are completely free. The only paid feature is the <strong style="color:var(--accent)">Document Checker</strong> — our AI that reads any contract or legal document and tells you in plain English exactly what it means, what's unfair, and what your rights are.</p>
+  </div>
+</div>
+
+<div class="pricing-wrap">
+
+  <!-- FREE VS PAID -->
+  <div class="free-paid reveal">
+    <div class="fp fp-free">
+      <div class="fp-label">Always free — no account needed</div>
+      <h3>Everything to know your rights</h3>
+      <ul>
+        <li>Consumer rights guide</li>
+        <li>Online &amp; social media rights guide</li>
+        <li>AI assistant — ask any legal question</li>
+        <li>Complaint letter builder</li>
+        <li>Rights checker</li>
+        <li>Subject access request generator</li>
+      </ul>
+      <a href="assistant.html" class="fp-btn">Use for free →</a>
+    </div>
+    <div class="fp fp-paid">
+      <div class="fp-label">Paid — from £9/month</div>
+      <h3>Document Checker</h3>
+      <ul>
+        <li>Paste any contract or legal document</li>
+        <li>Plain-English summary of what it means</li>
+        <li>Red/amber/green flags for unfair clauses</li>
+        <li>Your rights under UK law for that document</li>
+        <li>Overall fairness rating</li>
+        <li>Exactly what to do next</li>
+      </ul>
+      <a href="document-checker.html" class="fp-btn">See the Document Checker →</a>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="explainer reveal">
+    <div>
+      <div class="section-label">What is the Document Checker?</div>
+      <h2 style="font-size:clamp(22px,3.5vw,36px);margin-bottom:14px">A solicitor's eye on any document — in seconds</h2>
+      <p style="font-size:16px;color:var(--muted);line-height:1.8;margin-bottom:14px">Most people sign contracts, tenancy agreements, and terms &amp; conditions without really understanding them. A solicitor to review a single contract costs £150–£300.</p>
+      <p style="font-size:16px;color:var(--muted);line-height:1.8;margin-bottom:24px">The Document Checker does the same job in seconds, for £9 a month. Paste any document and get a full plain-English breakdown — what it actually means, what to watch out for, and what your rights are.</p>
+      <a href="document-checker.html" class="btn-primary">Try the Document Checker →</a>
+    </div>
+    <div class="ex-card">
+      <div class="ex-step">
+        <div class="ex-num">1</div>
+        <div><h4>Paste your document text</h4><p>Copy any contract, T&Cs, letter, tenancy agreement, or specific clause into the box.</p></div>
+      </div>
+      <div class="ex-step">
+        <div class="ex-num">2</div>
+        <div><h4>AI reads it instantly</h4><p>Our AI works through every clause and identifies what it actually means in plain English.</p></div>
+      </div>
+      <div class="ex-step">
+        <div class="ex-num">3</div>
+        <div><h4>Get your full breakdown</h4><p>You get a summary, flagged clauses, your rights under UK law, and what to do about it.</p></div>
+      </div>
+      <div class="ex-step">
+        <div class="ex-num">4</div>
+        <div><h4>Know before you sign</h4><p>Make an informed decision instead of guessing what you're agreeing to.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAN CARDS -->
+  <div class="section-label reveal">Choose your plan</div>
+  <p style="font-size:15px;color:var(--muted);margin-bottom:28px" class="reveal">All plans unlock the Document Checker. The free AI assistant and all guides are included with every plan at no extra cost.</p>
+
+  <div class="tiers reveal">
+
+    <div class="tier">
+      <div class="tier-name">Standard</div>
+      <div class="tier-price"><sup>£</sup>9<sub>/mo</sub></div>
+      <div class="tier-desc">For individuals</div>
+      <ul class="feat-list">
+        <li>Document Checker — unlimited checks</li>
+        <li>Contracts, T&amp;Cs, letters &amp; policies</li>
+        <li>Flags unfair &amp; illegal clauses</li>
+        <li>Your rights explained for each document</li>
+        <li>Fairness rating on every document</li>
+        <li>Free AI assistant included</li>
+        <li>All guides &amp; tools included</li>
+      </ul>
+      <div class="pp-ph">PayPal button goes here<br><a href="https://developer.paypal.com" target="_blank">Set up your PayPal plan →</a></div>
+      <div id="paypal-standard"></div>
+      <p class="pp-note">Cancel anytime · Secure payment via PayPal</p>
+    </div>
+
+    <div class="tier hot">
+      <div class="tier-badge">Most popular</div>
+      <div class="tier-name">Pro</div>
+      <div class="tier-price"><sup>£</sup>19<sub>/mo</sub></div>
+      <div class="tier-desc">For freelancers &amp; landlords</div>
+      <ul class="feat-list">
+        <li>Everything in Standard</li>
+        <li>Compare 2 documents side by side</li>
+        <li>Saved document history</li>
+        <li>Priority email support</li>
+        <li>Early access to new features</li>
+      </ul>
+      <div class="pp-ph">PayPal button goes here<br><a href="https://developer.paypal.com" target="_blank">Set up your PayPal plan →</a></div>
+      <div id="paypal-pro"></div>
+      <p class="pp-note">Cancel anytime · Secure payment via PayPal</p>
+    </div>
+
+    <div class="tier">
+      <div class="tier-name">Business</div>
+      <div class="tier-price"><sup>£</sup>39<sub>/mo</sub></div>
+      <div class="tier-desc">For small businesses</div>
+      <ul class="feat-list">
+        <li>Everything in Pro</li>
+        <li>Up to 5 team members</li>
+        <li>Supplier contracts &amp; NDAs</li>
+        <li>Monthly legal digest newsletter</li>
+        <li>Dedicated support channel</li>
+      </ul>
+      <div class="pp-ph">PayPal button goes here<br><a href="https://developer.paypal.com" target="_blank">Set up your PayPal plan →</a></div>
+      <div id="paypal-business"></div>
+      <p class="pp-note">Cancel anytime · Secure payment via PayPal</p>
+    </div>
+
+  </div>
+
+  <!-- PAYPAL SETUP -->
+  <div class="setup-box reveal">
+    <h3>⚙️ How to activate PayPal payments</h3>
+    <ol>
+      <li>Go to <a href="https://developer.paypal.com" target="_blank">developer.paypal.com</a> → log in → click <strong>My Apps &amp; Credentials</strong> → switch to the <strong>Live</strong> tab → click <strong>Create App</strong> → copy the <strong>Client ID</strong></li>
+      <li>Open <code>document-checker.html</code> in Notepad → press <strong>Ctrl+F</strong> → search <code>YOUR_CLIENT_ID</code> → replace it → save</li>
+      <li>On developer.paypal.com → click <strong>Subscriptions</strong> in the left menu → <strong>Products</strong> → <strong>Create Product</strong> → name it KnowYourRights</li>
+      <li>Click <strong>Plans</strong> → <strong>Create Plan</strong> → make 3 plans: Standard £9/mo, Pro £19/mo, Business £39/mo → copy each <strong>Plan ID</strong> (starts with P-)</li>
+      <li>In <code>document-checker.html</code> → press <strong>Ctrl+F</strong> → search <code>P-REPLACE_WITH_STANDARD_PLAN_ID</code> → replace all 3 placeholders with your real Plan IDs → save</li>
+      <li>Find and delete the line containing <code>Dev: bypass paywall</code> → save → upload to GitHub</li>
+    </ol>
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <div class="section-label reveal" style="margin-top:48px">Full comparison</div>
+  <table class="ct reveal">
+    <thead>
+      <tr><th>Feature</th><th>Free</th><th>Standard £9</th><th>Pro £19</th><th>Business £39</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>All guides &amp; articles</td><td><span class="tick">✓</span></td><td><span class="tick">✓</span></td><td><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>AI assistant (free Q&amp;A)</td><td><span class="tick">✓</span></td><td><span class="tick">✓</span></td><td><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Complaint letter builder</td><td><span class="tick">✓</span></td><td><span class="tick">✓</span></td><td><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Rights checker &amp; SAR tool</td><td><span class="tick">✓</span></td><td><span class="tick">✓</span></td><td><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td><strong>Document Checker</strong></td><td><span class="cross">—</span></td><td><span class="tick">✓ Unlimited</span></td><td><span class="tick">✓ Unlimited</span></td><td><span class="tick">✓ Unlimited</span></td></tr>
+      <tr><td>Compare documents side by side</td><td><span class="cross">—</span></td><td><span class="cross">—</span></td><td><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Saved document history</td><td><span class="cross">—</span></td><td><span class="cross">—</span></td><td><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Team members</td><td><span class="cross">—</span></td><td><span class="cross">—</span></td><td><span class="cross">—</span></td><td>Up to 5</td></tr>
+    </tbody>
+  </table>
+
+  <!-- FAQ -->
+  <div class="faq-wrap reveal">
+    <div class="section-label">Common questions</div>
+    <div class="faq-item"><div class="faq-q" onclick="faq(this)">What exactly does the Document Checker do? <span class="arr">↓</span></div><div class="faq-a">You paste the text of any contract, terms and conditions, tenancy agreement, employment clause, or legal letter. The Document Checker gives you: a plain-English summary of what it actually says, red/amber/green flags highlighting unfair or unusual clauses, your specific rights under UK law, an overall fairness rating, and clear steps on what to do.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="faq(this)">Why is the Document Checker not free? <span class="arr">↓</span></div><div class="faq-a">Detailed document analysis uses significantly more AI processing than a simple question and answer. Keeping it as a paid feature means we can keep everything else — guides, AI assistant, tools — completely free with no ads.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="faq(this)">What types of documents can I analyse? <span class="arr">↓</span></div><div class="faq-a">Employment contracts, tenancy agreements, service contracts, freelance agreements, app terms and conditions, privacy policies, refund policies, supplier contracts, NDAs, debt collection letters, or any specific clause you want explained in plain English.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="faq(this)">Is it real legal advice? <span class="arr">↓</span></div><div class="faq-a">No. The Document Checker provides general legal information based on UK law — not advice from a qualified solicitor. For high-value or complex matters, always consult a solicitor via solicitors.lawsociety.org.uk.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="faq(this)">Can I cancel anytime? <span class="arr">↓</span></div><div class="faq-a">Yes — cancel through your PayPal account at any time, no fees, no questions asked. Your access continues until the end of your current billing period.</div></div>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div><div class="footer-logo">KnowYour<em>Rights</em></div><p class="footer-tagline">Free, plain-English guides to UK consumer rights and online rights.</p></div>
+    <div class="footer-col"><h5>Guides</h5><a href="consumer-rights.html">Consumer rights</a><a href="online-rights.html">Online rights</a></div>
+    <div class="footer-col"><h5>Tools</h5><a href="tools.html">Letter builder</a><a href="assistant.html">AI assistant</a><a href="document-checker.html">Document Checker</a></div>
+    <div class="footer-col"><h5>Info</h5><a href="about.html">About</a><a href="pricing.html">Pricing</a></div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 KnowYourRights</div>
+    <div class="footer-disc">General legal information only. Not legal advice. Consult a qualified solicitor for specific matters.</div>
+  </div>
+</footer>
+<script>
+function faq(el){el.classList.toggle('open');el.nextElementSibling.classList.toggle('open');}
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
